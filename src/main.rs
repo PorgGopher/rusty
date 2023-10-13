@@ -3,6 +3,7 @@ mod model;
 use crate::model::EventModel;
 use serde_derive::Deserialize;
 use std::fs;
+use std::path::Path;
 use std::process::exit;
 use toml;
 
@@ -10,11 +11,11 @@ const CONFIGFILE: &str = "config.toml";
 
 #[derive(Debug, Deserialize)]
 struct Config {
-    path: Vec<Path>,
+    paths: Vec<RootPath>,
 }
 
 #[derive(Debug, Deserialize)]
-struct Path {
+struct RootPath {
     filepath: String,
 }
 
@@ -47,7 +48,19 @@ fn main() {
         }
     };
 
-    for path in config.path {
-        println!("path {:?}", path.filepath)
+    for path in config.paths {
+        println!("path {:?}", path.filepath);
+        let root_path = Path::new(&path.filepath);
+        let entry = fs::read_dir(root_path);
+        let entry = entry.unwrap();
+        for item in entry.into_iter() {
+            let item = item.unwrap();
+            println!(
+                "file name: {:?}\nfile type: {:?}\nfile metadata: {:?}\n",
+                item.file_name(),
+                item.file_type().unwrap(),
+                item.metadata().unwrap()
+            )
+        }
     }
 }

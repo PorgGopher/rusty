@@ -1,5 +1,5 @@
-[[path]]
-filepath = "abc"
+[[paths]]
+filepath = "/mnt/c/Users/Chandler"
 
-[[path]]
-filepath = "def"
+[[paths]]
+filepath = "/mnt/c/Users/Chandler/Downloads"
